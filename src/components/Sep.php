@@ -112,8 +112,10 @@ class Sep extends Component
             $model = SepLog::findOne($this->ResNumber);
 
             if ($model !== null) {
+                $model->ResNum = $params["ResNum"];
+
                 if(!empty($params["RefNum"])) {
-                    $model->ResNum = $params["RefNum"];
+                    $model->RefNum = $params["RefNum"];
                 }
                 if(!empty($params["SecurePan"])) {
                     $model->CardNumber = $params["SecurePan"];
@@ -129,7 +131,7 @@ class Sep extends Component
                 throw new HttpException(500, '"soapclient" class not found!');
             }
 
-            /** @var \soapclient $soapclient */
+            $this->RefNumber = $params["RefNum"];
             $soapclient = new \soapclient('https://acquirer.samanepay.com/payments/referencepayment.asmx?WSDL');
 
             $result = $soapclient->VerifyTransaction($this->RefNumber, $this->MerchantID);
